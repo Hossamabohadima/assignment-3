@@ -1,18 +1,6 @@
 #include <iostream>
 #include <algorithm>
 using namespace std;
-
-int solve(int *coins, int coinCount)
-{
-    sort(coins, coins + coinCount, [](int a, int b)
-         { return a > b; });
-    int difference = coins[0];
-    for (int i = 1; i < coinCount; i++)
-    {
-        difference -= coins[i];
-    }
-    return difference;
-}
 int solveDP(int *coins, int coinCount)
 {
     int sum = 0;
