@@ -6,7 +6,7 @@ using namespace std;
 class Solution
 {
 public:
-    int findContentChildren(std::vector<int> &g, std::vector<int> &s)
+    int findContentChildren(vector<int> &g, vector<int> &s)
     {
         sort(g.begin(), g.end());
         sort(s.begin(), s.end());
