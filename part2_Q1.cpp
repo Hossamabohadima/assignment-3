@@ -30,20 +30,26 @@ public:
 int main()
 {
     Solution solution;
-    // int n, m;
-    // cin >> n;
-    // vector<int> g (n) ;
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cin >> g[i];
-    // }
-    // cin >> m;
-    // vector<int> s (m);
-    // for (int i = 0; i < m; i++)
-    // {
-    //     cin >> s[i];
-    // }
-    vector<int> g = {1, 2, 3};
-    vector<int> s = {1, 1};
+    int n, m;
+    cout << "input size of g\n";
+    cin >> n;
+    vector<int> g(n);
+
+    cout << "input g\n";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> g[i];
+    }
+
+    cout << "input size of s\n";
+    cin >> m;
+    vector<int> s(m);
+
+    cout << "input s\n";
+    for (int i = 0; i < m; i++)
+    {
+        cin >> s[i];
+    }
+
     solution.findContentChildren(g, s);
 }
