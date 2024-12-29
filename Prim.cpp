@@ -23,9 +23,11 @@ int getMstCost(int **graph, int numberOfVertices)
         isIncludedVertix[i] = false;
     }
     currentMinimumEdgeWeights[0] = 0;
-    for (int i = 0; i < numberOfVertices - 1; i++)
+    for (int i = 0; i < numberOfVertices; i++)
     {
         int currentVertix = pickMinimumEdgeWeight(currentMinimumEdgeWeights, isIncludedVertix, numberOfVertices);
+        if (currentVertix == -1)
+            break;
         isIncludedVertix[currentVertix] = true;
         for (int targetVertix = 0; targetVertix < numberOfVertices; targetVertix++)
         {
@@ -37,6 +39,16 @@ int getMstCost(int **graph, int numberOfVertices)
             }
         }
     }
+    for (int i = 0; i < numberOfVertices; i++)
+    {
+        if (!isIncludedVertix[i])
+        {
+            delete[] isIncludedVertix;
+            delete[] currentMinimumEdgeWeights;
+            return -1; 
+        }
+    }
+
     int mstCost = 0;
     for (int i = 0; i < numberOfVertices; i++)
     {
