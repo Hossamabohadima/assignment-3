@@ -1,17 +1,21 @@
 #include <iostream>
+#include <vector>
 using namespace std;
+
+vector<int> dp;
 
 int calculatePossibilities(int n)
 {
-    int dp[n + 1];
-    dp[0] = 1;
-    dp[1] = 1;
-    for (int i = 2; i <= n; i++)
+    if (dp.size() <= n)
     {
-        dp[i] = dp[i - 1] + dp[i - 2];
+        int currentSize = dp.size();
+        dp.resize(n + 1, -1); // extend and initialize with -1
+
+        for (int i = currentSize; i <= n; i++)
+            dp[i] = (dp[i - 1] + dp[i - 2]) % 1000000007;
     }
     return dp[n];
-};
+}
 
 int main()
 {
@@ -28,6 +32,9 @@ int main()
         return 0;
     }
 
+    dp.push_back(1);
+    dp.push_back(1);
+
     for (int i = 0; i < n; i++)
     {
         if (s[i] == 'm' || s[i] == 'w')
@@ -36,22 +43,11 @@ int main()
             return 0;
         }
 
-        if (s[i] == 'u')
+        if (s[i] == 'u' || s[i] == 'n')
         {
+            char c = s[i];
             int count = 0;
-            while (i < n && s[i] == 'u')
-            {
-                count++;
-                i++;
-            }
-            i--;
-            result = (result * calculatePossibilities(count)) % 1000000007;
-        }
-
-        if (s[i] == 'n')
-        {
-            int count = 0;
-            while (i < n && s[i] == 'n')
+            while (i < n && s[i] == c)
             {
                 count++;
                 i++;
