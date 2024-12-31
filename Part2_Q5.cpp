@@ -18,47 +18,6 @@ struct Edge
         return weight > other.weight;
     }
 };
-struct UnionFind
-{
-    vector<int> parent;
-    vector<int> rank;
-
-    UnionFind(int n) : parent(n), rank(n, 0)
-    {
-        for (int i = 0; i < n; i++)
-            parent[i] = i;
-    }
-    // return parent of x and ensure it is stored correctly
-    int find(int x)
-    {
-        if (parent[x] != x)
-            parent[x] = find(parent[x]);
-        return parent[x];
-    }
-
-    bool unite(int x, int y)
-    {
-        int rootX = find(x);
-        int rootY = find(y);
-        if (rootX == rootY)
-            return false;
-
-        if (rank[rootX] > rank[rootY])
-        {
-            parent[rootY] = rootX;
-        }
-        else if (rank[rootX] < rank[rootY])
-        {
-            parent[rootX] = rootY;
-        }
-        else
-        {
-            parent[rootY] = rootX;
-            rank[rootX]++;
-        }
-        return true;
-    }
-};
 long long dijkstra(int start, const vector<vector<Edge>> &graph, vector<vector<long long>> &distances)
 {
     vector<long long> dist(graph.size(), LLONG_MAX);
@@ -124,6 +83,13 @@ int main()
             sum += distances[i][j];
         }
     }
-    cout << sum;
+    string binaryResult;
+    while (sum > 0)
+    {
+        binaryResult.push_back((sum % 2) + '0');
+        sum /= 2;
+    }
+    reverse(binaryResult.begin(), binaryResult.end());
+    cout << binaryResult << endl;
     return 0;
 }
