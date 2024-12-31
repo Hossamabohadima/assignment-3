@@ -7,7 +7,8 @@
 using namespace std;
 struct Edge
 {
-    int to, weight;
+    int to;
+    long long weight;
     bool operator<(const Edge &other) const
     {
         return weight < other.weight;
@@ -58,38 +59,42 @@ struct UnionFind
         return true;
     }
 };
-long long bfs(int start, const vector<vector<Edge>> &graph)
+long long dijkstra(int start, const vector<vector<Edge>> &graph, vector<vector<long long>> &distances)
 {
     vector<long long> dist(graph.size(), LLONG_MAX);
     dist[start] = 0;
 
-    queue<int> q;
-    q.push(start);
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
+    pq.push({0, start});
 
-    while (!q.empty())
+    while (!pq.empty())
     {
-        int node = q.front();
-        q.pop();
+        long long d = pq.top().first;
+        int node = pq.top().second;
+        pq.pop();
+
+        if (d > dist[node])
+        {
+            continue;
+        }
 
         for (const auto &edge : graph[node])
         {
-            if (dist[node] + (1LL << edge.weight) < dist[edge.to])
+            long long newDist = dist[node] + edge.weight;
+            if (newDist < dist[edge.to])
             {
-                dist[edge.to] = dist[node] + (1LL << edge.weight);
-                q.push(edge.to);
+                dist[edge.to] = newDist;
+                pq.push({newDist, edge.to});
             }
         }
     }
 
-    long long sum = 0;
-    for (auto d : dist)
+    // Store the shortest distances from the start node
+    for (int i = 0; i < graph.size(); i++)
     {
-        if (d != LLONG_MAX)
-        {
-            sum += d;
-        }
+        distances[start][i] = dist[i];
     }
-    return sum;
+    return 0;
 }
 int main()
 {
@@ -101,14 +106,24 @@ int main()
     {
         int A, B, C;
         cin >> A >> B >> C;
-        graph[A - 1].push_back({B - 1, C});
-        graph[B - 1].push_back({A - 1, C});
+        graph[A - 1].push_back({B - 1, 1ll << C});
+        graph[B - 1].push_back({A - 1, 1ll << C});
     }
-    long long result = 0;
+
+    vector<vector<long long>> distances(N, vector<long long>(N, LLONG_MAX));
+
     for (int i = 0; i < N; i++)
     {
-        long long totalCost = bfs(i, graph);
-        result += totalCost;
+        dijkstra(i, graph, distances);
     }
-    cout << result;
+    long long sum = 0;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            sum += distances[i][j];
+        }
+    }
+    cout << sum;
+    return 0;
 }
